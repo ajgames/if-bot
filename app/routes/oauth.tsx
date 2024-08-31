@@ -1,6 +1,6 @@
 import { useLoaderData } from "@remix-run/react";
 import { useEffect } from "react"
-
+ 
 export const loader = () => {
   return {
     googleClientId: process.env.GOOGLE_CLIENT_ID,
