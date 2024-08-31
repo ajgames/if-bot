@@ -11,7 +11,7 @@ export const loader: LoaderFunction = () => {
   const url = googleOauth2Client.generateAuthUrl({
     access_type: "offline",
     scope: scopes,
-    redirect_uri: "http://localhost:5173/google/auth/callback"
+    redirect_uri: `${process.env.BASE_URL}/google/auth/callback`
   });
 
   return redirect(url);
