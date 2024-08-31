@@ -1,0 +1,8 @@
+{
+  "name": "ifbot.ai",
+  "short_name": "ifbot.ai",
+  "icons": [],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}

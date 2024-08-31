@@ -14,10 +14,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="manifest" href="/site.webmanifest"></link>
         <Meta />
         <Links />
-        <script async defer src="https://apis.google.com/js/api.js" onload=""></script>
-        <script async defer src="https://accounts.google.com/gsi/client"></script>
       </head>
       <body>
         {children}
