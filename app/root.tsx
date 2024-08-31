@@ -1,5 +1,3 @@
-import { useEffect } from 'react'
-
 import {
   Links,
   Meta,
@@ -10,23 +8,6 @@ import {
 import "./tailwind.css";
 
 export function Layout({ children }: { children: React.ReactNode }) {
-
-  // pedantic, but f' it, 
-  // start up the service worker
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("/service-worker.js")
-          .then((registration) => {
-            console.log("Service Worker registered with scope:", registration.scope);
-          })
-          .catch((error) => {
-            console.log("Service Worker registration failed:", error);
-          });
-      });
-    }
-  }, []);
 
   return (
     <html lang="en">

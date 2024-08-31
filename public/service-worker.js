@@ -1,10 +1,11 @@
-
 /**
  *   register for PUSH, baby
  */
 self.addEventListener("push", async (event) => {
-    const { title, body } = await event.data.json();
-    self.registration.showNotification(title, {
-        body,
-    });
+  const jsonData = await event.data.json();
+  console.log(jsonData);
+  const { title, body } = jsonData;
+  self.registration.showNotification(title, {
+    body,
+  });
 });
