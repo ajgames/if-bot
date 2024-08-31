@@ -10,5 +10,14 @@ describe('ai', () => {
     const res = await checkEmailImportance(email);
     expect(res.notifyImmediately).toBe(true);
   });
+
+  test("Unimportant email subject line does not notify immediately", async () => {
+    const email = {
+      subject: "Your amazon order has been placed"
+    };
+
+    const res = await checkEmailImportance(email);
+    expect(res.notifyImmediately).toBe(false);
+  });
 })
 
