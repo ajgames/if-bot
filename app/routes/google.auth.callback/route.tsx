@@ -13,7 +13,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   const gmail = google.gmail({ version: "v1", auth: googleOauth2Client });
 
-  gmail.users.watch({
+  await gmail.users.watch({
     userId: 'me',
     requestBody: {
       topicName: process.env.GOOGLE_PUB_SUB_TOPIC
