@@ -13,15 +13,12 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   const gmail = google.gmail({ version: "v1", auth: googleOauth2Client });
 
-  gmail.users.watch()
-
-  const res = await gmail.users.messages.list({
+  gmail.users.watch({
     userId: 'me',
-    maxResults: 5, // Number of emails to fetch
-    q: '', // Empty query to fetch all emails
-  });
-
-  console.log(res.data);
+    requestBody: {
+      topicName: process.env.GOOGLE_PUB_SUB_TOPIC
+    }
+  })
 
   return redirect("/");
 };
