@@ -3,9 +3,14 @@
  */
 self.addEventListener("push", async (event) => {
   const jsonData = await event.data.json();
-  console.log(jsonData);
+
   const { title, body } = jsonData;
-  self.registration.showNotification(title, {
-    body,
-  });
+  try {
+    await self.registration.showNotification(title, {
+      body,
+    });
+  } catch(err) {
+    console.error(err);
+  }
+  
 });

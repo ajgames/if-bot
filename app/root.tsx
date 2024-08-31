@@ -6,9 +6,17 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import "./tailwind.css";
+import { useEffect } from "react";
 
 export function Layout({ children }: { children: React.ReactNode }) {
 
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/service-worker.js")
+    }
+  }, []);
+  
   return (
     <html lang="en">
       <head>
