@@ -1,11 +1,13 @@
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import {MongoClient, ServerApiVersion} from 'mongodb';
 import invariant from 'invariant';
+import {Nongoose} from './Nongoose'
 
-invariant(process.env.MONGODB_URI, 'MONGODB_URI is not set in the environment variables.');
+invariant(process.env.MONGO_DB_URL, 'MONGODB_URI is not set in the environment variables.');
 
-const uri: string = process.env.MONGODB_URI;
+const uri: string = process.env.MONGO_DB_URL;
 const client: MongoClient = new MongoClient(uri, {
-    serverApi: ServerApiVersion.v1});
+    serverApi: ServerApiVersion.v1
+});
 
 /** startup the mongo database connection **/
 async function run() {
@@ -13,7 +15,7 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
+        await client.db("admin").command({ping: 1});
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
@@ -22,17 +24,20 @@ async function run() {
 }
 
 /** we possibly don't want to start it from here **/
-run().catch((error)=>{
+run().catch((error) => {
     console.dir(error)
     throw (error)
 });
 
-export const collection = async (name: string) => {
-    return client.db(name)
+/** this is where we create the collection level
+ *  Models as they in Mongoose land call them. **/
+const collection = {
+    tokensGoogle: new Nongoose('tokens-google'),
+    sessions: new Nongoose('sessions')
 }
 
-export const find(query:any){
+export {
+    client,
+    collection
+};
 
-}
-
-export { client };
