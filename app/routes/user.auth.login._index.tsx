@@ -2,6 +2,7 @@ import {ActionFunctionArgs, json, LoaderFunctionArgs, redirect} from "@remix-run
 import {Form, useActionData, useLoaderData} from "@remix-run/react";
 
 import {getSession, commitSession} from "~/utils/sessionStorage.server";
+import {collection} from "~/utils/mongoDbClient";
 import Input from "~/forms/Input";
 import Button from "~/forms/Button";
 
@@ -13,6 +14,13 @@ async function validateCredentials(username: FormDataEntryValue | null, password
 }
 
 export async function loader({request}: LoaderFunctionArgs) {
+    const fullUrl = new URL(request.url);
+    await collection.metrics.insertOne({
+        event: "PageView",
+        uri: `${fullUrl.origin}${fullUrl.pathname}`,
+        user: null,
+        createdAt: new Date()
+    })
     const session = await getSession(request.headers.get("Cookie"));
     if (session.has("userId")) {
         return json({loggedIn: true});

@@ -12,16 +12,16 @@ export const {getSession, commitSession, destroySession} =
             secrets: ["your-secret-key"], // Replace with your own secret key
         },
         async createData(data, expires) {
-            const id = await collection.sessions.insertOne(data);
-            return id;
+            await collection.sessions.insertOne(data);
+            return data.userId;
         },
         async readData(id) {
-            return (await collection.sessions.findById(id)) || null;
+            return (await collection.sessions.find({userId: id})) || null;
         },
         async updateData(id, data, expires) {
-            await collection.sessions.updateOne({_id: id}, data);
+            await collection.sessions.updateOne({userId: id}, data);
         },
         async deleteData(id) {
-            await collection.sessions.deleteOne({_id: id});
+            await collection.sessions.deleteOne({userId: id});
         },
     });

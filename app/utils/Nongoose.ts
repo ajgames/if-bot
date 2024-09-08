@@ -8,10 +8,12 @@ export class Nongoose {
         this.collectionName = collectionName;
     }
 
-    async insertOne(document: Document): Promise<InsertOneResult<Document>> {
+    async insertOne(document: Document): Promise<string> {
         try {
-            const result = await client.db.collection(this.collectionName).insertOne(document, {new: true});
-            return result._id;
+            const result = await client.db(process.env.MONGO_DATABASE).collection(this.collectionName).insertOne(document);
+            const insertedId = result.insertedId.toString();
+            console.log("inserted id:  ", insertedId);
+            return insertedId;
         } catch (error) {
             console.error("Failed to insert document", error);
             throw error;
@@ -20,7 +22,7 @@ export class Nongoose {
 
     async find(query: Document): Promise<Document[]> {
         try {
-            const result = await client.db.collection(this.collectionName).find(query).toArray();
+            const result = await client.db(process.env.MONGO_DATABASE).collection(this.collectionName).find(query).toArray();
             return result;
         } catch (error) {
             console.error("Failed to find documents", error);
@@ -28,9 +30,9 @@ export class Nongoose {
         }
     }
 
-    async findById(id: string): Promise<Document> {
+    async findById(id: string): Promise<Document | null> {
         try {
-            const result = await client.db.collection(this.collectionName).findById(id).toArray();
+            const result = await client.db(process.env.MONGO_DATABASE).collection(this.collectionName).findOne({_id: id});
             return result;
         } catch (error) {
             console.error("Failed to find documents", error);
@@ -42,7 +44,7 @@ export class Nongoose {
     // A: probably the ones that raw mongo utilizes
     async updateOne(filter: Document, update: Document): Promise<UpdateResult> {
         try {
-            const result = await client.db.collection(this.collectionName).updateOne(filter, update);
+            const result = await client.db(process.env.MONGO_DATABASE).collection(this.collectionName).updateOne(filter, {'$set': update});
             return result;
         } catch (error) {
             console.error("Failed to update document", error);
@@ -52,7 +54,9 @@ export class Nongoose {
 
     async deleteOne(filter: Document): Promise<DeleteResult> {
         try {
-            const result = await client.db.collection(this.collectionName).deleteOne(filter);
+            const result = await client.db(process.env.MONGO_DATABASE).collection(this.collectionName).deleteOne(filter);
+            const deletedNum = result.deletedCount
+            console.log("total deleted:  ", deletedNum);
             return result;
         } catch (error) {
             console.error("Failed to delete document", error);
