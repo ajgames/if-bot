@@ -11,7 +11,21 @@ import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
+import mongoose from "mongoose";
 
+async function connectToDatabase() {
+  try {
+    console.log("Connecting to MongoDB");
+    await mongoose.connect(process.env.MONGO_URI as string);
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.error("Failed to connect to MongoDB:", error);
+    process.exit(1);
+  }
+}
+
+// Call the connection function
+connectToDatabase();
 const ABORT_DELAY = 5_000;
 
 export default function handleRequest(

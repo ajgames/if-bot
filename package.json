@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "remix vite:build",
-    "dev": "remix vite:dev --port 2048",
+    "dev": "remix vite:dev --port 8000",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "PORT=2048 remix-serve ./build/server/index.js",
     "test": "bun test",
@@ -21,6 +21,7 @@
     "bun": "^1.1.26",
     "googleapis": "^143.0.0",
     "isbot": "^4.1.0",
+    "mongoose": "^8.7.0",
     "openai": "^4.57.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
