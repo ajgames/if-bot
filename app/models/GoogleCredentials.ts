@@ -3,6 +3,7 @@ import { Credentials } from "google-auth-library";
 
 interface IGoogleCredentials extends Document, Credentials {
   userId: mongoose.Types.ObjectId;
+  lastHistoryId?: string;
 }
 
 const GoogleCredentialsSchema: Schema = new Schema({
@@ -13,6 +14,7 @@ const GoogleCredentialsSchema: Schema = new Schema({
   token_type: { type: String },
   id_token: { type: String },
   scope: { type: String },
+  lastHistoryId: { type: String },
 });
 
 export const GoogleCredentials =

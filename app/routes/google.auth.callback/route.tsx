@@ -36,12 +36,33 @@ export const loader: LoaderFunction = async ({ request }) => {
     user = await User.create({ email });
   }
 
+  let lastHistoryId = null;
+
+  const response = await gmail.users.messages.list({
+    userId: "me",
+    maxResults: 1,
+  });
+
+  console.log("Response:", response);
+
+  if (response.data.messages && response.data.messages.length > 0) {
+    const messageId = response.data.messages[0].id;
+    const message = await gmail.users.messages.get({
+      userId: "me",
+      id: messageId,
+    });
+
+    console.log("Initial historyId:", message.data.historyId);
+    lastHistoryId = message.data.historyId;
+  }
+
   // Store the Google credentials
   await GoogleCredentials.updateOne(
     { userId: user._id },
     {
       userId: user._id,
       ...tokens,
+      lastHistoryId,
     },
     { upsert: true, new: true }
   );
