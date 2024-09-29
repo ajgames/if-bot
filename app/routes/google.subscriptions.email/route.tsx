@@ -1,8 +1,10 @@
+import webpush from "web-push";
 import { google } from "googleapis";
 import { googleOauth2Client } from "~/utils/googleOauthClient";
 import { LoaderFunction } from "@remix-run/node";
 import { GoogleCredentials } from "~/models/GoogleCredentials";
 import { User } from "~/models/User";
+import { WebPushSubscription } from "~/models/WebPushSubscription";
 
 export const action: LoaderFunction = async ({ request }) => {
   console.log("EMAIL SUBSCRIPTION");
@@ -94,6 +96,26 @@ export const action: LoaderFunction = async ({ request }) => {
           console.log(`Message body: ${body}`);
 
           // Add your further message processing logic here
+          const subscription = await WebPushSubscription.findOne({
+            userId: user._id,
+          });
+
+          if (subscription) {
+            webpush.setVapidDetails(
+              `mailto:${process.env.VAPID_MAILTO}`,
+              process.env.VAPID_PUBLIC_KEY || "",
+              process.env.VAPID_PRIVATE_KEY || ""
+            );
+
+            await webpush.sendNotification(
+              subscription,
+              JSON.stringify({
+                title:
+                  subject.length > 50 ? subject.slice(0, 47) + "..." : subject,
+                body: body.length > 180 ? body.slice(0, 177) + "..." : body,
+              })
+            );
+          }
         }
       }
     }
