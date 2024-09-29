@@ -75,10 +75,13 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   // TODO: Some kind of state to track that they have successfully subscribed
 
-  const headers = new Headers();
-  headers.append("x-user-id", user._id.toString());
+  const cookieHeader = new Headers();
+  cookieHeader.append(
+    "Set-Cookie",
+    `userId=${user._id.toString()}; Path=/; HttpOnly`
+  );
 
   return redirect("/", {
-    headers: headers,
+    headers: cookieHeader,
   });
 };
