@@ -2,7 +2,6 @@ import { google } from "googleapis";
 
 import { LoaderFunction, redirect } from "@remix-run/node";
 import { googleOauth2Client } from "~/utils/googleOauthClient";
-import { useLoaderData } from "@remix-run/react";
 import { User } from "~/models/User";
 import { GoogleCredentials } from "~/models/GoogleCredentials";
 
@@ -84,5 +83,13 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   // TODO: Some kind of state to track that they have successfully subscribed
 
-  return redirect("/");
+  const cookieHeader = new Headers();
+  cookieHeader.append(
+    "Set-Cookie",
+    `userId=${user._id.toString()}; Path=/; HttpOnly`
+  );
+
+  return redirect("/", {
+    headers: cookieHeader,
+  });
 };
