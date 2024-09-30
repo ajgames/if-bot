@@ -10,7 +10,16 @@ export const loader: LoaderFunction = async ({ request }) => {
   console.log("Google Auth Callback");
 
   let { searchParams } = new URL(request.url);
+  let error = searchParams.get("error") || "";
+
+  if (error) {
+    return {
+      error: error,
+    };
+  }
+
   let code = searchParams.get("code") || "";
+
 
   const { tokens } = await googleOauth2Client.getToken(code);
   googleOauth2Client.setCredentials(tokens);
@@ -42,7 +51,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     userId: "me",
     maxResults: 1,
   });
-
   console.log("Response:", response);
 
   if (response.data.messages && response.data.messages.length > 0) {
