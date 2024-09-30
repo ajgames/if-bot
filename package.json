@@ -6,8 +6,10 @@
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev --port 8000",
+    "dev:farquad": "remix vite:dev --host --port 80",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "PORT=2048 remix-serve ./build/server/index.js",
+    "start:farquad": "PORT=80 remix-serve ./build/server/index.js",
     "test": "bun test",
     "typecheck": "tsc"
   },
